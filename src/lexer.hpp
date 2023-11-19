@@ -2,6 +2,7 @@
 #define LEXER_HPP_
 
 #include <string>
+#include <vector>
 
 enum TokenType {
     StackPush, Print
@@ -18,6 +19,6 @@ struct Token {
     Token* tokens[];
 };
 
-Token ParseNext(std::string fileData);
+void ParseNext(std::string fileData, std::vector<Token>* tokens, Cursor* cursor);
 
 #endif // LEXER_HPP_

@@ -1,11 +1,13 @@
 #include "lexer.hpp"
 #include <iostream>
 #include <string>
+#include <vector>
 
-Token ParseNext(std::string fileData, Cursor* cursor) {
+void ParseNext(std::string fileData, std::vector<Token>* tokens, Cursor* cursor) {
     Token result;
-    TokenType type;
-    Token* tokens[] = {};
-    int dataInt;
-    std::string dataString;
+
+    result.DataString = fileData[cursor->Index];
+
+    cursor->Index++;
+    tokens->push_back(result);
 }

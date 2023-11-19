@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "config.h"
 #include "lexer.hpp"
 
@@ -27,5 +28,15 @@ int main(int argCount, char** args) {
     std::string fileData;
     fileData = readFile(filePath.c_str());
     fileData = removeNewLines(fileData.c_str());
-    std::cout << fileData << std::endl;
+
+    std::vector<Token> tokens;
+    Cursor cursor = {0};
+    while (cursor.Index < fileData.size()) {
+        ParseNext(fileData, &tokens, &cursor);
+    }
+
+    for (int i = 0; i < tokens.size(); i++) {
+        std::cout << tokens[i].DataString << " ";
+    }
+    std::cout << std::endl;
 }
