@@ -12,7 +12,8 @@ include_directories("${PROJECT_BINARY_DIR}")
 # add_library(board ${BOARD_SRC})
 
 # Orlets
-add_executable(orlets src/main.cpp)
+file(GLOB Sources src/*.c src/*.cpp)
+add_executable(orlets ${Sources})
 # target_link_libraries(orlets board gfx)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

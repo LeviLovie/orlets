@@ -2,10 +2,10 @@ run:
 	@cd ./build;\
 		cmake ..;\
 		make
-	@./build/orlets
+	@./build/orlets $(path)
 
 fresh:
 	@cd ./build;\
 		cmake .. --fresh;\
 		make
-	@./build/orlets
+	@./build/orlets $(path)
