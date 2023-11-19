@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int checkFile(const char* path) {
     FILE *file = fopen(path, "r");
@@ -37,6 +38,26 @@ const char* readFile(const char* path) {
     fclose(file);
 
     return content;
+}
+
+const char* removeNewLines(const char* data) {
+    size_t data_len = strlen(data);
+    char* result = (char*)malloc(data_len + 1);
+    if (result == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (size_t i = 0; i < data_len; i++) {
+        if (data[i] == '\n') {
+            result[i] = ' ';
+        } else {
+            result[i] = data[i];
+        }
+    }
+    result[data_len] = '\0';
+
+    return result;
 }
 
 #endif // FILE_H_

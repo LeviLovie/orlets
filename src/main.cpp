@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "config.h"
+#include "lexer.hpp"
 
 extern "C" {
     #include "file.h"
@@ -25,5 +26,6 @@ int main(int argCount, char** args) {
 
     std::string fileData;
     fileData = readFile(filePath.c_str());
+    fileData = removeNewLines(fileData.c_str());
     std::cout << fileData << std::endl;
 }
