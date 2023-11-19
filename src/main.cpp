@@ -22,4 +22,8 @@ int main(int argCount, char** args) {
     } else {
         std::cout << "Intepreting \"" << filePath << "\";" << std::endl;
     }
+
+    std::string fileData;
+    fileData = readFile(filePath.c_str());
+    std::cout << fileData << std::endl;
 }
