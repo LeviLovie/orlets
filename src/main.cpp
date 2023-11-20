@@ -16,8 +16,7 @@ int main(int argCount, char** args) {
         exit(1);
     }
 
-    std::string filePath;
-    filePath = args[1];
+    std::string filePath = args[1];
     if (checkFile(filePath.c_str()) != 1) {
         std::cerr << "File \"" << filePath << "\" not found. Please specify valid filepath!" << std::endl;
         exit(1);
@@ -25,18 +24,9 @@ int main(int argCount, char** args) {
         std::cout << "Intepreting \"" << filePath << "\";" << std::endl;
     }
 
-    std::string fileData;
-    fileData = readFile(filePath.c_str());
-    fileData = removeNewLines(fileData.c_str());
-
-    std::vector<Token> tokens;
-    Cursor cursor = {0};
-    while (cursor.Index < fileData.size()) {
-        ParseNext(fileData, &tokens, &cursor);
-    }
-
+    std::string fileData = cleanFile(readFile(filePath.c_str()));
+    std::vector<Token> tokens = parseFile(fileData);
     for (int i = 0; i < tokens.size(); i++) {
-        std::cout << tokens[i].DataString << " ";
+        std::cout << tokens[i].Type << " (" << tokens[i].DataInt << ", \"" << tokens[i].DataString << "\")" << std::endl;
     }
-    std::cout << std::endl;
 }

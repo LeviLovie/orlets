@@ -5,20 +5,15 @@
 #include <vector>
 
 enum TokenType {
-    StackPush, Print
-};
-
-struct Cursor {
-    int Index;
+    PushInt, PushFloat, PushString, Plus, Dump
 };
 
 struct Token {
     TokenType Type;
     int DataInt;
     std::string DataString;
-    Token* tokens[];
 };
 
-void ParseNext(std::string fileData, std::vector<Token>* tokens, Cursor* cursor);
+std::vector<Token> parseFile(std::string fileData);
 
 #endif // LEXER_HPP_
