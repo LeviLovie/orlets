@@ -5,12 +5,15 @@
 #include <vector>
 
 enum TokenType {
-    PushInt, PushFloat, PushString, Plus, Dump
+    PushInt, PushFloat, PushString,
+    Plus, Minus, Multiply, Divide, Power, Modulo,
+    Swap, Dump, Less, More, Equal,
 };
 
 struct Token {
     TokenType Type;
     int DataInt;
+    float DataFloat;
     std::string DataString;
 };
 

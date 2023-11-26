@@ -47,10 +47,29 @@ std::vector<Token> parseFile(std::string fileData) {
         std::string t = tokens[i];
         Token token;
         token.DataInt = 0;
+        token.DataFloat = 0.0;
         token.DataString = "";
 
         if (t == "+") {
             token.Type = Plus;
+        } else if (t == "-") {
+            token.Type = Minus;
+        } else if (t == "*") {
+            token.Type = Multiply;
+        } else if (t == "/") {
+            token.Type = Divide;
+        } else if (t == "^") {
+            token.Type = Power;
+        } else if (t == "%") {
+            token.Type = Modulo;
+        } else if (t == "&") {
+            token.Type = Swap;
+        } else if (t == "<") {
+            token.Type = Less;
+        } else if (t == ">") {
+            token.Type = More;
+        } else if (t == "=") {
+            token.Type = Equal;
         } else if (t == ".") {
             token.Type = Dump;
         } else if (startsWith(t, "(") && endsWith(t, ")")) {
@@ -60,13 +79,14 @@ std::vector<Token> parseFile(std::string fileData) {
                 token.DataInt = stoi(sbstr);
             } else if (isFloat(sbstr)) {
                 token.Type = PushFloat;
-                token.DataString = sbstr;
+                token.DataFloat = stof(sbstr);
             } else {
                 token.Type = PushString;
                 token.DataString = sbstr;
             }
         } else {
             std::cerr << "Not implemented token: \"" << t << "\"" << std::endl;
+            exit(1);
         }
 
         result.push_back(token);
