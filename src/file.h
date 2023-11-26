@@ -40,47 +40,4 @@ const char* readFile(const char* path) {
     return content;
 }
 
-const char* cleanFile(const char* data) {
-    if (data == NULL) {
-        return NULL;
-    }
-
-    int len = 0;
-    int consecutiveWhitespace = 0;
-    for (int i = 0; data[i] != '\0'; i++) {
-        if (isspace((unsigned char)data[i])) {
-            if (consecutiveWhitespace == 0) {
-                len++;
-            }
-            consecutiveWhitespace = 1;
-        } else {
-            len++;
-            consecutiveWhitespace = 0;
-        }
-    }
-
-    char* cleanedData = (char*)malloc(len + 1);
-    if (cleanedData == NULL) {
-        return NULL;
-    }
-
-    int index = 0;
-    consecutiveWhitespace = 0;
-
-    for (int i = 0; data[i] != '\0'; i++) {
-        if (isspace((unsigned char)data[i])) {
-            if (consecutiveWhitespace == 0) {
-                cleanedData[index++] = ' ';
-            }
-            consecutiveWhitespace = 1;
-        } else {
-            cleanedData[index++] = data[i];
-            consecutiveWhitespace = 0;
-        }
-    }
-
-    cleanedData[index] = '\0';
-    return cleanedData;
-}
-
 #endif // FILE_H_

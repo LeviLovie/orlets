@@ -15,8 +15,11 @@ struct Token {
     int DataInt;
     float DataFloat;
     std::string DataString;
+    std::string fileName;
+    int line;
+    int col;
 };
 
-std::vector<Token> parseFile(std::string fileData);
+std::vector<Token> parseFile(std::string fileData, std::string fileName);
 
 #endif // LEXER_HPP_

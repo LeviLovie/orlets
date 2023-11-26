@@ -91,7 +91,6 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
                 std::cerr << "Unknown StackItemType for Plus: " << firstItem.Type << std::endl;
                 exit(1);
             }
-            std::cout << " " << std::endl;
             break;
         }
 
