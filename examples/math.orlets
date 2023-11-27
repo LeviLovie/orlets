@@ -1,0 +1,17 @@
+("2 + 3") . endl
+(2) (3) + . endl endl
+
+("2 - 3") . endl
+(2) (3) - . endl endl
+
+("2 * 3") . endl
+(2) (3) * . endl endl
+
+("6 / 3") . endl
+(6) (3) / . endl endl
+
+("2 ^ 3") . endl
+(2) (3) ^ . endl endl
+
+("2 % 3") . endl
+(2) (3) % . endl

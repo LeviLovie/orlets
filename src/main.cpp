@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
         std::cout << "\x1b[1mDebug info\x1b[0m:" << std::endl;
     }
     std::string fileData = readFile(filePath.c_str());
-    std::vector<Token> tokens = parseFile(fileData, args[1]);
+    std::vector<Token> tokens = parseFile(fileData, args[0]);
     if (debugMode) {
         for (int i = 0; i < tokens.size(); i++) {
             std::cout << tokens[i].Type << " (" << tokens[i].DataInt << ", " << tokens[i].DataFloat << ", \"" << tokens[i].DataString << "\") " << "in " << tokens[i].fileName << ":" << tokens[i].line << ":" << tokens[i].col << std::endl;

@@ -71,6 +71,36 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
             } else if (checkForSpaceToken(f, cursor, '.')) {
                 tokens.push_back((Token){Dump, 0, 0.0, "", fileName, line + 1, col});
                 col++;
+            } else if (checkForSpaceToken(f, cursor, '-')) {
+                tokens.push_back((Token){Minus, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '*')) {
+                tokens.push_back((Token){Multiply, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '/')) {
+                tokens.push_back((Token){Divide, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '^')) {
+                tokens.push_back((Token){Power, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '%')) {
+                tokens.push_back((Token){Modulo, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '#')) {
+                tokens.push_back((Token){Swap, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '<')) {
+                tokens.push_back((Token){Less, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '>')) {
+                tokens.push_back((Token){More, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '=')) {
+                tokens.push_back((Token){Equal, 0, 0.0, "", fileName, line + 1, col});
+                col++;
+            } else if (checkForSpaceToken(f, cursor, '`')) {
+                tokens.push_back((Token){Debug, 0, 0.0, "", fileName, line + 1, col});
+                col++;
             } else if (f[cursor] == '(') {
                 int lc = cursor + 1;
                 std::string varstr = "";
@@ -86,6 +116,7 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
                     }
                     lc++;
                 }
+                cursor = lc;
                 if (varstr == "") {
                     std::cerr << "[LEXER] [ERR] Params aren't closed or have no value " << fileName << ":" << line + 1 << ":" << col << std::endl;
                     exit(1);
@@ -108,76 +139,19 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
                     std::cerr << "[LEXER] [ERR] Can't parse valuse inside params (wrap strings in \"\") " << fileName << ":" << line + 1 << ":" << col << std::endl;
                     exit(1);
                 }
-
-                // int lcursor = cursor;
-                // while (lcursor < f.size()) {
-                //     if (f[lcursor] == '\n') line++;
-                //     lcursor++;
-                // }
-                // lcursor = cursor;
-                //
-                // bool closeFound = false;
-                // int closeParam = lcursor;
-                // while (lcursor < f.size() && !closeFound) {
-                //     if (f[lcursor] == ')') closeFound = true; closeParam = lcursor;
-                //     lcursor++;
-                //     col++;
-                // }
-                // if (!closeFound) {
-                //     std::cerr << "[LEXER] [ERR] Can't find closing param for opening param. " << fileName << ":" << linle + 1 << ":" << col << std::endl;
-                //     exit(1);
-                // }
-                // lcursor = cursor;
-                //
-                // bool isString = false;
-                // bool strOpenFound = false;
-                // int strOpening = 0;
-                // bool closeStringParamFound = false;
-                // int closeStringParam = 0;
-                // while (lcursor < f.size() && !strOpenFound) {
-                //     if (f[lcursor] == '"') {
-                //         isString = true;
-                //         strOpenFound = true;
-                //         strOpening = lcursor;
-                //         lcursor++;
-                //         while (lcursor < f.size() && !closeStringParamFound) {
-                //             if (f[lcursor] == '"') {
-                //                 closeStringParamFound = true;
-                //                 closeStringParam = lcursor;
-                //             }
-                //             lcursor++;
-                //         }
-                //     }
-                //     lcursor++;
-                // }
-                // if (!closeFound) {
-                //     std::cerr << "[LEXER] [ERR] Can't find closing string param for opening string param. " << fileName << ":" << strOpening + 1 << ":" << col << std::endl;
-                //     exit(1);
-                // }
-                // lcursor = cursor;
-                //
-                // if (isString) {
-                //     std::string stringData;
-                //     int stringLength = closeStringParam - strOpening;
-                //     for (int i = 1; i < stringLength; i++) {
-                //         stringData += f[i + strOpening];
-                //     }
-                //     tokens.push_back((Token){PushString, 0, 0.0, stringData, fileName, line + 1, col});
-                // } else {
-                //     std::string var;
-                //     int varLength = closeParam - cursor;
-                //     for (int i = 1; i < varLength; i++) {
-                //         var += f[i + cursor];
-                //     }
-                //     var = ltrim(var);
-                //     var = rtrim(var);
-                //
-                //     if (isInteger(var)) {
-                //         tokens.push_back((Token){PushInt, stoi(var), 0.0, "", fileName, line + 1, col});
-                //     } else if (isFloat(var)) {
-                //         tokens.push_back((Token){PushFloat, 0, stof(var), "", fileName, line + 1, col});
-                //     }
-                // }
+            } else if (startsWith(f.substr(cursor, f.size()), "//")) {
+                int lc = cursor;
+                while(lc < f.size()) {
+                    if (f[lc] == '\n') break;
+                    lc++;
+                }
+                cursor = lc;
+                line++;
+                col = 0;
+            } else if (startsWith(f.substr(cursor, f.size()), "endl")) {
+                tokens.push_back((Token){Endl, 0, 0.0, "", fileName, line + 1, col});
+                cursor += 3;
+                col += 4;
             } else {
                 col++;
             }

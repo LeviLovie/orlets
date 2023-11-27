@@ -6,7 +6,7 @@
 #include "lexer.hpp"
 
 enum StackItemType {
-    Int, Float, String
+    Int, Float, String,
 };
 
 struct StackItem {
