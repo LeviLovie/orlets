@@ -8,6 +8,7 @@ enum TokenType {
     PushInt, PushFloat, PushString,
     Plus, Minus, Multiply, Divide, Power, Modulo,
     Swap, Dump, Less, More, Equal, Debug, Endl,
+    If, Endif,
 };
 
 struct Token {

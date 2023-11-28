@@ -152,6 +152,14 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
                 tokens.push_back((Token){Endl, 0, 0.0, "", fileName, line + 1, col});
                 cursor += 3;
                 col += 4;
+            } else if (startsWith(f.substr(cursor, f.size()), "if")) {
+                tokens.push_back((Token){If, 0, 0.0, "", fileName, line + 1, col});
+                cursor++;
+                col += 1;
+            } else if (startsWith(f.substr(cursor, f.size()), "endif")) {
+                tokens.push_back((Token){Endif, 0, 0.0, "", fileName, line + 1, col});
+                cursor += 4;
+                col += 5;
             } else {
                 col++;
             }
