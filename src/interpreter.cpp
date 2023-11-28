@@ -227,6 +227,13 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
             break;
         }
 
+        case Dup: {
+            StackItem item = getLastStackElement(&stack, t);
+            stack.push_back(item);
+            stack.push_back(item);
+            break;
+        }
+
         case Less: {
             StackItem secondItem = getLastStackElement(&stack, t);
             StackItem firstItem = getLastStackElement(&stack, t);

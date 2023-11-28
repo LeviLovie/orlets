@@ -86,9 +86,6 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
             } else if (checkForSpaceToken(f, cursor, '%')) {
                 tokens.push_back((Token){Modulo, 0, 0.0, "", fileName, line + 1, col});
                 col++;
-            } else if (checkForSpaceToken(f, cursor, '#')) {
-                tokens.push_back((Token){Swap, 0, 0.0, "", fileName, line + 1, col});
-                col++;
             } else if (checkForSpaceToken(f, cursor, '<')) {
                 tokens.push_back((Token){Less, 0, 0.0, "", fileName, line + 1, col});
                 col++;
@@ -160,6 +157,14 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
                 tokens.push_back((Token){Endif, 0, 0.0, "", fileName, line + 1, col});
                 cursor += 4;
                 col += 5;
+            } else if (startsWith(f.substr(cursor, f.size()), "swp")) {
+                tokens.push_back((Token){Swap, 0, 0.0, "", fileName, line + 1, col});
+                cursor += 2;
+                col += 3;
+            } else if (startsWith(f.substr(cursor, f.size()), "dup")) {
+                tokens.push_back((Token){Dup, 0, 0.0, "", fileName, line + 1, col});
+                cursor += 2;
+                col += 3;
             } else if (startsWith(f.substr(cursor, f.size()), "else")) {
                 tokens.push_back((Token){Else, 0, 0.0, "", fileName, line + 1, col});
                 cursor += 3;
