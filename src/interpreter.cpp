@@ -219,6 +219,158 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
             break;
         }
 
+        case Swap: {
+            StackItem secondItem = getLastStackElement(&stack, t);
+            StackItem firstItem = getLastStackElement(&stack, t);
+            stack.push_back(firstItem);
+            stack.push_back(secondItem);
+            break;
+        }
+
+        case Dup: {
+            StackItem item = getLastStackElement(&stack, t);
+            stack.push_back(item);
+            stack.push_back(item);
+            break;
+        }
+
+        case Less: {
+            StackItem secondItem = getLastStackElement(&stack, t);
+            StackItem firstItem = getLastStackElement(&stack, t);
+            checkForSameTypes(firstItem, secondItem, t);
+            switch (firstItem.Type) {
+            case Int:
+                if (firstItem.IntData < secondItem.IntData) {
+                    stack.push_back((StackItem){Int, 1, 0.0, ""});
+                } else {
+                    stack.push_back((StackItem){Int, 0, 0.0, ""});
+                }
+                break;
+
+            case Float:
+                if (firstItem.FloatData < secondItem.FloatData) {
+                    stack.push_back((StackItem){Int, 1, 0.0, ""});
+                } else {
+                    stack.push_back((StackItem){Int, 0, 0.0, ""});
+                }
+                break;
+
+            case String:
+                std::cerr << "Operation can't be done on strings" << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+
+            default:
+                std::cerr << "Unknown StackItemType: " << firstItem.Type << " in " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            break;
+        }
+
+        case More: {
+            StackItem secondItem = getLastStackElement(&stack, t);
+            StackItem firstItem = getLastStackElement(&stack, t);
+            checkForSameTypes(firstItem, secondItem, t);
+            switch (firstItem.Type) {
+            case Int:
+                if (firstItem.IntData > secondItem.IntData) {
+                    stack.push_back((StackItem){Int, 1, 0.0, ""});
+                } else {
+                    stack.push_back((StackItem){Int, 0, 0.0, ""});
+                }
+                break;
+
+            case Float:
+                if (firstItem.FloatData > secondItem.FloatData) {
+                    stack.push_back((StackItem){Int, 1, 0.0, ""});
+                } else {
+                    stack.push_back((StackItem){Int, 0, 0.0, ""});
+                }
+                break;
+
+            case String:
+                std::cerr << "Operation can't be done on strings" << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+
+            default:
+                std::cerr << "Unknown StackItemType: " << firstItem.Type << " in " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            break;
+        }
+
+        case Equal: {
+            StackItem secondItem = getLastStackElement(&stack, t);
+            StackItem firstItem = getLastStackElement(&stack, t);
+            checkForSameTypes(firstItem, secondItem, t);
+            switch (firstItem.Type) {
+            case Int:
+                if (firstItem.IntData == secondItem.IntData) {
+                    stack.push_back((StackItem){Int, 1, 0.0, ""});
+                } else {
+                    stack.push_back((StackItem){Int, 0, 0.0, ""});
+                }
+                break;
+
+            case Float:
+                if (firstItem.FloatData == secondItem.FloatData) {
+                    stack.push_back((StackItem){Int, 1, 0.0, ""});
+                } else {
+                    stack.push_back((StackItem){Int, 0, 0.0, ""});
+                }
+                break;
+
+            case String:
+                std::cerr << "Operation can't be done on strings" << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+
+            default:
+                std::cerr << "Unknown StackItemType: " << firstItem.Type << " in " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            break;
+        }
+
+        case If: {
+            StackItem item = getLastStackElement(&stack, t);
+            switch (item.Type) {
+            case Int:
+                if (item.IntData == 1) break;
+                else {
+                    if (t.DataFloat == 0.0) i = t.DataInt;
+                    else i = static_cast<int>(t.DataFloat);
+                }
+                break;
+
+            case Float:
+                if (item.FloatData == 1.0f) break;
+                else {
+                    if (t.DataFloat == 0.0) i = t.DataInt;
+                    else i = static_cast<int>(t.DataFloat);
+                }
+                break;
+
+            case String:
+                if (item.StringData == "true") break;
+                else {
+                    if (t.DataFloat == 0.0) i = t.DataInt;
+                    else i = static_cast<int>(t.DataFloat);
+                }
+                break;
+
+            default:
+                std::cerr << "Unknown StackItemType: " << item.Type << " in " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            break;
+        }
+
+        case Endif:
+            break;
+
+        case Else:
+            i = tokens[t.DataInt].DataInt;
+            break;
+
         case Dump:
             dumpInt(&stack, t);
             break;
@@ -230,13 +382,7 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
         case Debug:
             std::cout << "\x1b[1mDebug stack printout\x1b[0m (in " << t.fileName << ":" << t.line << ":" << t.col << "): ";
             for (int i = 0; i < stack.size(); i++) {
-                if (stack[i].Type == Int) {
-                    std::cout << stack[i].IntData;
-                } else if (stack[i].Type == Float) {
-                    std::cout << stack[i].FloatData;
-                } else if (stack[i].Type == String) {
-                    std::cout << "\"" << stack[i].StringData << "\"";
-                }
+                std::cout << "(" << stack[i].IntData << " " << stack[i].FloatData << " \"" << stack[i].StringData << "\")";
                 if (i < stack.size() - 1) {
                     std::cout << ", ";
                 }
@@ -246,7 +392,7 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
 
         default:
             std::cerr << "[INTERPRETER] [ERR]: " << "Unknown token: " << t.Type << std::endl;
-            break;
+            exit(1);
         }
     }
 

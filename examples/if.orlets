@@ -1,0 +1,20 @@
+("Check, if sum is equal to 69") . endl
+(34) (35) + (69) = if
+  ("Yes") . endl
+else
+  ("No") . endl
+endif endl
+
+("Check, if number is 1, 2, 3, 4, or 5 and print, if it is") . endl
+(3)
+dup (1) = if
+  ("It is `1`") . endl
+endif dup (2) = if
+  ("It is `2`") . endl
+endif dup (3) = if
+  ("It is `3`") . endl
+endif dup (4) = if
+  ("It is `4`") . endl
+endif dup (5) = if
+  ("It is `5`") . endl
+endif

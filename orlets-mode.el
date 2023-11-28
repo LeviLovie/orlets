@@ -11,7 +11,7 @@
 
 (eval-and-compile
   (defconst orlets-keywords
-    '("endl")))
+    '("endl" "if" "endif" "else" "swp" "dup")))
 
 (defconst orlets-highlights
   `((,(regexp-opt orlets-keywords 'symbols) . font-lock-keyword-face)
