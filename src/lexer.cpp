@@ -160,11 +160,46 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
                 tokens.push_back((Token){Endif, 0, 0.0, "", fileName, line + 1, col});
                 cursor += 4;
                 col += 5;
+            } else if (startsWith(f.substr(cursor, f.size()), "else")) {
+                tokens.push_back((Token){Else, 0, 0.0, "", fileName, line + 1, col});
+                cursor += 3;
+                col += 4;
             } else {
                 col++;
             }
         }
         cursor++;
+    }
+
+    for (int i = 0; i < tokens.size(); i++) {
+        if (tokens[i].Type == If) {
+            int lc = i;
+            int depth = 0;
+            while (lc < tokens.size()) {
+                lc++;
+
+                if (tokens[lc].Type == If) depth++;
+                else if (tokens[lc].Type == Endif) {
+                    if (depth == 0) {
+                        tokens[i].DataInt = lc;
+                    } else depth--;
+                    if (depth < 0) {
+                        std::cerr << "[LEXER] [ERR] Too many \"endif\" tokens " << tokens[lc].fileName << ":" << tokens[lc].line + 1 << ":" << tokens[lc].col << std::endl;
+                        exit(1);
+                    }
+                } else if (tokens[lc].Type == Else) {
+                    if (depth == 0) {
+                        tokens[i].DataFloat = static_cast<float>(lc);
+                        tokens[lc].DataInt = i;
+                    }
+                }
+
+                if (lc == tokens.size() + 1) {
+                    std::cerr << "[LEXER] [ERR] Can't find \"endif\" token for " << tokens[i].fileName << ":" << tokens[i].line + 1 << ":" << tokens[i].col << std::endl;
+                    exit(1);
+                }
+            }
+        }
     }
 
     return tokens;
