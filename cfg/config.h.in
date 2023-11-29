@@ -5,7 +5,7 @@
 #define PROJECT_VERSION  "\x1b[1m${PROJECT_VERSION}\x1b[0m"
 
 void bootup() {
-    std::cout << "Booting up " << PROJECT_NAME << " v" << PROJECT_VERSION << " up;" << std::endl;
+    std::cout << "Booting " << PROJECT_NAME << " v" << PROJECT_VERSION << " up;" << std::endl;
 }
 
 #endif // CONFIG_H

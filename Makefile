@@ -10,8 +10,8 @@ debug:
 		make
 	@./build/orlets $(path) -d
 
-fresh:
+dev:
 	@cd ./build;\
-		cmake .. --fresh;\
+		cmake ..;\
 		make
-	@./build/orlets $(path)
+	@./build/orlets ./test.orlets -d

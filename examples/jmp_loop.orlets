@@ -1,0 +1,6 @@
+(3) // How many times to run the loop
+(0) ("loop_start") jeg (1) +
+
+("Loop entry! #") . dup . endl // Loop body
+
+dup lswp dup lswp > if swp ("loop_start") jmp endif

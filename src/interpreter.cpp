@@ -28,7 +28,7 @@ StackItem getLastStackElement(std::vector<StackItem> *stack, Token t) {
     return result;
 }
 
-void dumpInt(std::vector<StackItem> *stack, Token t) {
+void dump(std::vector<StackItem> *stack, Token t) {
     StackItem dumpItem = getLastStackElement(stack, t);
     switch (dumpItem.Type) {
     case Int:
@@ -47,7 +47,28 @@ void dumpInt(std::vector<StackItem> *stack, Token t) {
         std::cerr << "Unknown StackItemType for Dump: " << t.fileName << ":" << t.line << ":" << t.col << dumpItem.Type << std::endl;
         exit(1);
     }
-    std::cout << " ";
+}
+
+void print(std::vector<StackItem> *stack, Token t) {
+    StackItem item = getLastStackElement(stack, t);
+    stack->push_back(item);
+    switch (item.Type) {
+    case Int:
+        std::cout << item.IntData;
+        break;
+
+    case Float:
+        std::cout << item.FloatData;
+        break;
+
+    case String:
+        std::cout << item.StringData;
+        break;
+
+    default:
+        std::cerr << "Unknown StackItemType for Dump: " << t.fileName << ":" << t.line << ":" << t.col << item.Type << std::endl;
+        exit(1);
+    }
 }
 
 void checkForSameTypes(StackItem first, StackItem second, Token t) {
@@ -57,8 +78,21 @@ void checkForSameTypes(StackItem first, StackItem second, Token t) {
     }
 }
 
+struct Reg {
+    std::string Name;
+    int TokenId;
+};
+
+int findRegByName(std::vector<Reg> regs, std::string name) {
+    for (int i = 0; i < regs.size(); i++) {
+        if (regs[i].Name == name) return regs[i].TokenId;
+    }
+    return -1;
+}
+
 std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
     std::vector<StackItem> stack;
+    std::vector<Reg> regs;
 
     for (int i = 0; i < tokens.size(); i++) {
         Token t = tokens[i];
@@ -222,8 +256,18 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
         case Swap: {
             StackItem secondItem = getLastStackElement(&stack, t);
             StackItem firstItem = getLastStackElement(&stack, t);
-            stack.push_back(firstItem);
             stack.push_back(secondItem);
+            stack.push_back(firstItem);
+            break;
+        }
+
+        case LSwap: {
+            StackItem thirdItem = getLastStackElement(&stack, t);
+            StackItem secondItem = getLastStackElement(&stack, t);
+            StackItem firstItem = getLastStackElement(&stack, t);
+            stack.push_back(thirdItem);
+            stack.push_back(secondItem);
+            stack.push_back(firstItem);
             break;
         }
 
@@ -231,6 +275,34 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
             StackItem item = getLastStackElement(&stack, t);
             stack.push_back(item);
             stack.push_back(item);
+            break;
+        }
+
+        case Jeg: {
+            StackItem item = getLastStackElement(&stack, t);
+            if (item.Type != String) {
+                std::cerr << "[INTERPRETER] [ERR]: " << "You can registry only string for a jmp " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            if (findRegByName(regs, item.StringData) != -1) {
+                std::cerr << "[INTERPRETER] [ERR]: " << "Reg with this name already exists " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            regs.push_back((Reg){item.StringData, i});
+            break;
+        }
+
+        case Jmp: {
+            StackItem item = getLastStackElement(&stack, t);
+            if (item.Type != String) {
+                std::cerr << "[INTERPRETER] [ERR]: " << "You can use only strings as names for a jmp " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            if (findRegByName(regs, item.StringData) == -1) {
+                std::cerr << "[INTERPRETER] [ERR]: " << "Reg with this name is not existng " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            i = findRegByName(regs, item.StringData);
             break;
         }
 
@@ -372,7 +444,11 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
             break;
 
         case Dump:
-            dumpInt(&stack, t);
+            dump(&stack, t);
+            break;
+
+        case Print:
+            print(&stack, t);
             break;
 
         case Endl:
