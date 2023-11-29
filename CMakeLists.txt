@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.0)
-project(orlets VERSION 0.0.3 LANGUAGES C CXX)
+project(orlets VERSION 0.0.4 LANGUAGES C CXX)
 enable_testing()
 
 configure_file (
