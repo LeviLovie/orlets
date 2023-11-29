@@ -1,19 +1,19 @@
 run:
-	mkdir ./build
+	mkdir -p ./build
 	@cd ./build;\
 		cmake ..;\
 		make
 	@./build/orlets $(path)
 
 debug:
-	mkdir ./build
+	mkdir -p ./build
 	@cd ./build;\
 		cmake ..;\
 		make
 	@./build/orlets $(path) -d
 
 dev:
-	mkdir ./build
+	mkdir -p ./build
 	@cd ./build;\
 		cmake ..;\
 		make
