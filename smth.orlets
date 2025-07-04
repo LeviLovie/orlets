@@ -1,0 +1,8 @@
+(0) , endl (1)
+
+("loop") jeg
+  , endl
+  dup lswp +
+  dup (1000) < if
+    ("loop") jmp
+    endif

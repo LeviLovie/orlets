@@ -1,0 +1,15 @@
+("Please enter a max number generated: ") in
+dup type ("int") = if
+  (0) , endl ()
+
+  ("loop") jeg
+    , endl
+    dup lswp +
+      lswp dup lswp dup lswp < if lswp swp lswp swp
+      ("loop") jmp
+      endif
+  endif
+
+// lswp dup lswp dup lswp < if lswp swp lswp swp
+
+// 20 5 2

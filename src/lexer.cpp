@@ -184,6 +184,14 @@ std::vector<Token> parseFile(std::string f, std::string fileName) {
                 tokens.push_back((Token){Else, 0, 0.0, "", fileName, line + 1, col});
                 cursor += 3;
                 col += 4;
+            } else if (startsWith(f.substr(cursor, f.size()), "in")) {
+                tokens.push_back((Token){In, 0, 0.0, "", fileName, line + 1, col});
+                cursor += 1;
+                col += 2;
+            } else if (startsWith(f.substr(cursor, f.size()), "type")) {
+                tokens.push_back((Token){Type, 0, 0.0, "", fileName, line + 1, col});
+                cursor += 3;
+                col += 4;
             } else {
                 col++;
             }

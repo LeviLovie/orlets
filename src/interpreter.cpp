@@ -392,8 +392,12 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
                 break;
 
             case String:
-                std::cerr << "Operation can't be done on strings" << t.fileName << ":" << t.line << ":" << t.col << std::endl;
-                exit(1);
+                if (firstItem.StringData == secondItem.StringData) {
+                    stack.push_back((StackItem){Int, 1, 0.0, ""});
+                } else {
+                    stack.push_back((StackItem){Int, 0, 0.0, ""});
+                }
+                break;
 
             default:
                 std::cerr << "Unknown StackItemType: " << firstItem.Type << " in " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
@@ -464,7 +468,60 @@ std::vector<StackItem> InterpretTokens(std::vector<Token> tokens) {
                 }
             }
             std::cout << std::endl;
-        break;
+            break;
+
+        case In: {
+            StackItem item = getLastStackElement(&stack, t);
+            if (item.Type != String) {
+                std::cerr << "[INTERPRETER] [ERR]: " << "You can use only strings as names for a inint " << t.fileName << ":" << t.line << ":" << t.col << std::endl;
+                exit(1);
+            }
+            std::cout << item.StringData;
+            std::string in;
+            std::cin >> in;
+            // Check if it's a number
+            int isNumber = 1;
+            for (int i = 0; i < in.size(); i++) {
+                if (in[i] < '0' || in[i] > '9') {
+                    isNumber = 0;
+                    break;
+                }
+            }
+            if (isNumber) {
+                // Check if it's a float
+                int isFloat = 0;
+                for (int i = 0; i < in.size(); i++) {
+                    if (in[i] == '.') {
+                        isFloat = 1;
+                        break;
+                    }
+                }
+                if (isFloat) {
+                    stack.push_back((StackItem){Float, 0, std::stof(in), ""});
+                } else {
+                    stack.push_back((StackItem){Int, std::stoi(in), 0.0, ""});
+                }
+            } else {
+                stack.push_back((StackItem){String, 0, 0.0, in});
+            }
+            break;
+        }
+
+        case Type: {
+            StackItem item = getLastStackElement(&stack, t);
+            switch (item.Type) {
+            case Int:
+                stack.push_back((StackItem){String, 0, 0.0, "int"});
+                break;
+            case Float:
+                stack.push_back((StackItem){String, 0, 0.0, "float"});
+                break;
+            case String:
+                stack.push_back((StackItem){String, 0, 0.0, "string"});
+                break;
+            }
+            break;
+        }
 
         default:
             std::cerr << "[INTERPRETER] [ERR]: " << "Unknown token: " << t.Type << std::endl;

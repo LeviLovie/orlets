@@ -9,6 +9,7 @@ enum TokenType {
     Plus, Minus, Multiply, Divide, Power, Modulo,
     Swap, LSwap, Dump, Print, Less, More, Equal, Debug, Endl, Dup,
     Jeg, Jmp, If, Endif, Else,
+    Type, In,
 };
 
 struct Token {
